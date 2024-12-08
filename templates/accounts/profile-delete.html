@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="{% url 'index' %}">Home</a>
+                    <span class="breadcrumb-item active">Profile Details</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Detail Start -->
+    <div class="container-fluid pb-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-3 mb-30">
+                {% if not profile.profile_picture %}
+                    <img class="img-fluid" src="{% static 'img/no-profile.jpg' %}" alt="Product">
+                {% else %}
+                    <img class="img-fluid" src="{{ profile.profile_picture.url }}" alt="Product">
+                {% endif %}
+            </div>
+
+            <div class="col-lg-7 h-auto mb-30">
+                <div class="h-100 bg-light p-30">
+                    <h3>{{ profile.get_name }}</h3>
+                    <div class="d-flex mb-3">
+                        <div class="text-primary mr-2">
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star"></small>
+                            <small class="fas fa-star-half-alt"></small>
+                            <small class="far fa-star"></small>
+                        </div>
+                        <small class="pt-1">(99 Reviews)</small>
+                    </div>
+                    <h3 class="font-weight-semi-bold mb-4">Total Items: {{ profile.user.product_set.count }}</h3>
+                    <div class="d-flex mb-3">
+                        <strong class="text-dark mr-3">Location: {{ profile.location }}</strong>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <strong class="text-dark mr-3">Email: {{ profile.user.email }}</strong>
+                    </div>
+                    <h3>Are you sure you want to delete your profile?</h3>
+                    <div class="d-flex align-items-center mb-4 pt-2">
+                        <form action="{% url 'profile_delete' pk=object.pk %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-primary px-3 bg-danger">
+                                <i class="fa fa-trash mr-1"></i>Delete Profile
+                            </button>
+                            <a href="{% url 'profile_details' pk=object.pk %}" class="btn btn-info px-3">
+                            <i class="fa fa-arrow-left mr-1"></i> Back to Profile
+                        </a>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Shop Detail End -->
+
+{% endblock %}
