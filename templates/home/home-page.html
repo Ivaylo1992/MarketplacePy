@@ -72,7 +72,7 @@
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="{{ product.photo_set.first.image.url }}" alt="">
+                            <img class="img-fluid w-100" src="{{ product.photos.first.photo.url }}" alt="">
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" href=""><i
                                         class="fa fa-info"></i></a>
@@ -82,7 +82,7 @@
                                     <a class="btn btn-outline-dark btn-square" href=""><i
                                             class="fa fa-trash"></i></a>
                                 {% else %}
-                                    <a class="btn btn-outline-dark btn-square" href=""><i
+                                    <a class="btn btn-outline-dark btn-square" href="{% url 'send_message' product.pk%}"><i
                                             class="fa fa-envelope"></i></a>
                                 {% endif %}
                             </div>

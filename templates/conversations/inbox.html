@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
+                    <span class="breadcrumb-item active">Inbox</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Cart Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-7 table-responsive mb-5">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-light table-borderless text-center mb-0">
+                        <thead class="thead-dark sticky-top">
+                        <tr>
+                            <th>Buyer</th>
+                            <th>Item</th>
+                            <th>Last Message</th>
+                            <th>Details</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                        {% for conversation in object_list %}
+                            <tr>
+                                <td class="align-middle">
+                                    <img src="{{ conversation.members.first.profile.profile_picture.url }}" alt=""
+                                         style="width: 50px;">
+                                    <a href="{% url 'profile_details' pk=conversation.members.first.pk %}">
+                                        {% if not conversation.product.user == request.user %}Me{% else %}
+                                            {{ conversation.members.first.profile.get_name }}{% endif %}
+                                    </a></td>
+                                <td class="align-middle">
+                                    <img src="{{ conversation.product.photo_set.first.image.url }}" alt=""
+                                         style="width: 50px;">
+                                    <a href="{% url 'product_details' conversation.product.pk %}">{{ conversation.product }}</a>
+                                </td>
+                                <td class="align-middle">
+                                    {{ conversation.updated_at }}
+                                </td>
+                                <td class="align-middle">
+                                    <a href="{% url 'conversation_details' product_id=conversation.product.pk conversation_id=conversation.pk %}"
+                                       class="btn btn-sm btn-success"><i class="fa fa-info"></i></a></td>
+                                <td class="align-middle">
+                                    <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <div class="col-lg-5 mb-5">
+            <div class="bg-light p-30 mb-30">
+                <div class="product-offer mb-30" style="height: 300px;">
+                    <img class="img-fluid" src="{% static 'img/buy.png' %}" alt="">
+                    <div class="offer-text">
+                        <h3 class="text-white mb-3">Find Your Next Treasure</h3>
+                        <a href="" class="btn btn-primary">Browse Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Cart End -->
+{% endblock %}
