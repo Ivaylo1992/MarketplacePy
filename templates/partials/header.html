@@ -8,7 +8,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+    <link href="" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -29,7 +29,7 @@
     <div class="container-fluid">
         <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
             <div class="col-lg-4">
-                <a href="" class="text-decoration-none">
+                <a href="{% url 'home_page' %}" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Marketplace</span>
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Py</span>
                 </a>
@@ -76,7 +76,7 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="" class="nav-item nav-link active">Home</a>
+                            <a href="{% url 'home_page' %}" class="nav-item nav-link active">Home</a>
                             <a href="" class="nav-item nav-link">Products</a>
                         </div>
                         <a href="" class="nav-item nav-link">
@@ -87,9 +87,9 @@
                             <i class="fa fa-solid fa-envelope"></i>
                             Inbox
                         </a>
-                        <a href="" class="nav-item nav-link">
+                        <a href="{% url 'item_add' %}" class="nav-item nav-link">
                             <i class="fa fa-solid fa-plus"></i>
-                            Add Product
+                            Add Item
                         </a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -98,15 +98,15 @@
                                 <i class="fa fa-angle-down mt-1"></i></a>
                                 <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                                     {% if not request.user.is_authenticated %}
-                                    <a href="" class="dropdown-item">Login</a>
+                                    <a href="{% url 'login' %}" class="dropdown-item">Login</a>
                                     <a href="{% url 'register' %}" class="dropdown-item">Register</a>
                                     {% else %}
-                                    <a href="" class="dropdown-item">Profile Details</a>
-                                    <a href="" class="dropdown-item">Edit Profile</a>
+                                    <a href="{% url 'profile_details' request.user.pk%}" class="dropdown-item">Profile Details</a>
+                                    <a href="{% url 'profile_edit' request.user.pk%}" class="dropdown-item">Edit Profile</a>
                                     <a href="" class="dropdown-item">My Products</a>
                                     <a href="" class="dropdown-item">Liked Products</a>
                                     
-                                        <form action="" method="post">
+                                        <form action="{% url 'logout' %}" method="post">
                                         <button class="btn-custom">Logout</button>
                                         {% csrf_token %}
                                         </form>

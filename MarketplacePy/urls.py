@@ -6,4 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('MarketplacePy.accounts.urls')),
     path('', include('MarketplacePy.home.urls')),
+    path('items/', include('MarketplacePy.items.urls')),
 ]

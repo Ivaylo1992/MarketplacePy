@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,9 +46,11 @@ INSTALLED_APPS = [
 
     'MarketplacePy.accounts',
     "MarketplacePy.home.apps.HomeConfig",
+    "MarketplacePy.items.apps.ItemsConfig",
 
     'cloudinary',
     'cloudinary_storage',
+
 
 ]
 
@@ -150,8 +155,14 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': "rJ6QO3L_Eb2XL1gi3pKOUEmWil0",
 }
 
+cloudinary.config(
+    cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=CLOUDINARY_STORAGE['API_SECRET'],
+)
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 LOGIN_REDIRECT_URL = reverse_lazy("home_page")
 
-LOGOUT_REDIRECT_URL = reverse_lazy("login")
+LOGOUT_REDIRECT_URL = reverse_lazy("home_page")

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletable Image Cubes</title>
+    <style>
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .image-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .delete-button:hover {
+            background: rgba(255, 0, 0, 1);
+        }
+    </style>
+</head>
+<div class="image-grid">
+    {% for image in photos %}
+        <div class="image-item">
+            <img src="{{ image.photo.url }}" alt="Image 1">
+            <form action="{% url 'photo_delete' pk=image.pk %}" method="post">
+                {% csrf_token %}
+                <button class="delete-button">X</button>
+            </form>
+        </div>
+    {% endfor %}
+
+    <!-- Add more images as needed -->
+</div>
+
+<script>
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function (e) {
+            if (!confirm("Are you sure you want to delete this photo?")) {
+                e.preventDefault(); // Cancel form submission if user cancels
+            }
+        });
+    });
+</script>
+</html>
