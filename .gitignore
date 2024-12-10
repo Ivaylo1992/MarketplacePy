@@ -1,0 +1,50 @@
+# Python-specific
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environment
+venv/
+env/
+
+# Django-specific
+*.log
+*.pot
+*.pyc
+*.pyo
+db.sqlite3
+instance/
+media/
+staticfiles/
+# Uncomment if using a local settings file
+# local_settings.py
+
+# PyCharm-specific
+.idea/
+*.iml
+*.iws
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Testing
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Miscellaneous
+*.swp
+*.swo
