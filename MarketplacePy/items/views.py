@@ -135,7 +135,7 @@ class ItemsBrowseView(LoginRequiredMixin, views.ListView):
         return context
 
     def get_queryset(self):
-        products = Item.objects.all()\
+        items = Item.objects.all()\
             .annotate(
             has_like=Exists(
                 ItemLike.objects.filter(item=OuterRef('pk'), user=self.request.user)
@@ -147,14 +147,14 @@ class ItemsBrowseView(LoginRequiredMixin, views.ListView):
         min_price = self.request.GET.get('min_price', 0)
         max_price = self.request.GET.get('max_price', 9999)
 
-        products = products.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
+        items = items.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
 
         if category_id:
-            products = products.filter(category_id=category_id)
+            items = items.filter(category_id=category_id)
 
         if query:
-            products = products.filter(
+            items = items.filter(
                 Q(name__icontains=query) | Q(description__icontains=query)
             )
 
-        return products
+        return items
