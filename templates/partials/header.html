@@ -77,13 +77,13 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'home_page' %}" class="nav-item nav-link active">Home</a>
-                            <a href="" class="nav-item nav-link">Products</a>
+                            <a href="{% url 'items_browse' %}" class="nav-item nav-link">Items</a>
                         </div>
                         <a href="" class="nav-item nav-link">
                             <i class="fa fa-solid fa-heart"></i>
                             <strong>{{ request.user.like_set.count }}</strong>
                         </a>
-                        <a href="" class="nav-item nav-link">
+                        <a href="{% url 'inbox' %}" class="nav-item nav-link">
                             <i class="fa fa-solid fa-envelope"></i>
                             Inbox
                         </a>
@@ -103,8 +103,8 @@
                                     {% else %}
                                     <a href="{% url 'profile_details' request.user.pk%}" class="dropdown-item">Profile Details</a>
                                     <a href="{% url 'profile_edit' request.user.pk%}" class="dropdown-item">Edit Profile</a>
-                                    <a href="" class="dropdown-item">My Products</a>
-                                    <a href="" class="dropdown-item">Liked Products</a>
+                                    <a href="" class="dropdown-item">My Items</a>
+                                    <a href="" class="dropdown-item">Liked Items</a>
                                     
                                         <form action="{% url 'logout' %}" method="post">
                                         <button class="btn-custom">Logout</button>

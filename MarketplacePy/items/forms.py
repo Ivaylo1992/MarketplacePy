@@ -6,18 +6,6 @@ from MarketplacePy.common.forms import MultipleImageField
 from MarketplacePy.items.models import Item, ItemPhoto
 
 
-class SearchItemForm(forms.Form):
-    query_param = forms.CharField(
-        label="",
-        max_length=100,
-        required=False,
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Search for products..."
-        })
-    )
-
-
 class PriceRangeForm(forms.Form):
     min_price = forms.DecimalField(
         initial=0,
@@ -79,3 +67,15 @@ class ItemPhotoAddForm(forms.Form):
 
 class ItemPhotoEditForm(ItemPhotoAddForm):
     photo = MultipleImageField(required=False)
+
+
+class SearchItemForm(forms.Form):
+    query_param = forms.CharField(
+        label="",
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Search for products..."
+        })
+    )

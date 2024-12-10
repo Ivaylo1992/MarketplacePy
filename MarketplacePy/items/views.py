@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Exists, Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as views
 
-from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, ItemPhotoEditForm
-from MarketplacePy.items.models import Item, ItemPhoto
+from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, ItemPhotoEditForm, SearchItemForm, PriceRangeForm
+from MarketplacePy.items.models import Item, ItemPhoto, Category
 
 
 class ItemAddView(views.View):
@@ -120,3 +121,40 @@ class PhotoDeleteView(views.DeleteView):
             'item_edit',
             kwargs={'pk': self.object.item.pk}
         )
+
+
+class ItemsBrowseView(LoginRequiredMixin, views.ListView):
+    template_name = 'items/items-browse.html'
+    paginate_by = 8
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_form'] = SearchItemForm
+        context['categories'] = Category.objects.all()
+        context['price_form'] = PriceRangeForm
+        return context
+
+    def get_queryset(self):
+        products = Item.objects.all()\
+        #     .annotate(
+        #     has_like=Exists(
+        #         Like.objects.filter(product=OuterRef('pk'), user=self.request.user)
+        #     )
+        # )
+
+        query = self.request.GET.get('query_param', '')
+        category_id = self.request.GET.get('category', 0)
+        min_price = self.request.GET.get('min_price', 0)
+        max_price = self.request.GET.get('max_price', 9999)
+
+        products = products.filter(Q(price__gte=min_price) & Q(price__lte=max_price))
+
+        if category_id:
+            products = products.filter(category_id=category_id)
+
+        if query:
+            products = products.filter(
+                Q(name__icontains=query) | Q(description__icontains=query)
+            )
+
+        return products

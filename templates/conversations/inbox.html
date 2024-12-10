@@ -27,7 +27,7 @@
                             <th>Buyer</th>
                             <th>Item</th>
                             <th>Last Message</th>
-                            <th>Details</th>
+                            <th>To conversation</th>
                             <th>Remove</th>
                         </tr>
                         </thead>
@@ -35,23 +35,28 @@
                         {% for conversation in object_list %}
                             <tr>
                                 <td class="align-middle">
+                                    {% if conversation.members.first.profile.profile_picture %}
                                     <img src="{{ conversation.members.first.profile.profile_picture.url }}" alt=""
                                          style="width: 50px;">
+                                    {% else %}
+                                    <img src="{% static 'img/no-profile.jpg' %}" alt=""
+                                         style="width: 50px;">
+                                    {% endif %}
                                     <a href="{% url 'profile_details' pk=conversation.members.first.pk %}">
-                                        {% if not conversation.product.user == request.user %}Me{% else %}
+                                        {% if not conversation.item.user == request.user %}Me{% else %}
                                             {{ conversation.members.first.profile.get_name }}{% endif %}
                                     </a></td>
                                 <td class="align-middle">
-                                    <img src="{{ conversation.product.photo_set.first.image.url }}" alt=""
+                                    <img src="{{ conversation.item.photos.first.photo.url }}" alt=""
                                          style="width: 50px;">
-                                    <a href="{% url 'product_details' conversation.product.pk %}">{{ conversation.product }}</a>
+                                    <a href="{% url 'item_details' conversation.item.pk %}">{{ conversation.item }}</a>
                                 </td>
                                 <td class="align-middle">
                                     {{ conversation.updated_at }}
                                 </td>
                                 <td class="align-middle">
-                                    <a href="{% url 'conversation_details' product_id=conversation.product.pk conversation_id=conversation.pk %}"
-                                       class="btn btn-sm btn-success"><i class="fa fa-info"></i></a></td>
+                                    <a href="{% url 'conversation_details' item_id=conversation.item.pk conversation_id=conversation.pk %}"
+                                       class="btn btn-sm btn-success"><i class="fa fa-arrow-right"></i></a></td>
                                 <td class="align-middle">
                                     <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
                                 </td>
