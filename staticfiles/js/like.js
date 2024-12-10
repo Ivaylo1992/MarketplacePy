@@ -3,10 +3,10 @@ const likeBtns = document.querySelectorAll('.like-btn');
 
 likeBtns.forEach(btn => {
     btn.addEventListener('click', function(event) {
-        const productId = this.dataset.productId;
+        const itemId = this.dataset.itemId;
 
         // Send the AJAX request to toggle like
-        fetch(`/api/like/${productId}/`, {
+        fetch(`/api/like/${itemId}/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

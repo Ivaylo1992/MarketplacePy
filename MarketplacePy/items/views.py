@@ -1,11 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Exists, Q
+from django.db.models import Exists, Q, OuterRef
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as views
 
 from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, ItemPhotoEditForm, SearchItemForm, PriceRangeForm
-from MarketplacePy.items.models import Item, ItemPhoto, Category
+from MarketplacePy.items.models import Item, ItemPhoto, Category, ItemLike
 
 
 class ItemAddView(views.View):
@@ -136,11 +136,11 @@ class ItemsBrowseView(LoginRequiredMixin, views.ListView):
 
     def get_queryset(self):
         products = Item.objects.all()\
-        #     .annotate(
-        #     has_like=Exists(
-        #         Like.objects.filter(product=OuterRef('pk'), user=self.request.user)
-        #     )
-        # )
+            .annotate(
+            has_like=Exists(
+                ItemLike.objects.filter(item=OuterRef('pk'), user=self.request.user)
+            )
+        )
 
         query = self.request.GET.get('query_param', '')
         category_id = self.request.GET.get('category', 0)

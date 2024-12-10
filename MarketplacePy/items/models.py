@@ -108,3 +108,11 @@ class ItemPhoto(TimeStampedMixin, HasUser):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+
+class ItemLike(HasUser, TimeStampedMixin):
+    item = models.ForeignKey(
+        Item,
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
