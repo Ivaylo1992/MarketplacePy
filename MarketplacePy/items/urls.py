@@ -11,5 +11,6 @@ urlpatterns = (
         path("delete/", views.ItemDeleteView.as_view(), name="item_delete"),
     ])),
     path("photos/<int:pk>/delete/", views.PhotoDeleteView.as_view(), name="photo_delete"),
+    path("liked_items/", views.LikedItemsView.as_view(), name="liked_items"),
 )
 

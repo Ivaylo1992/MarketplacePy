@@ -158,3 +158,11 @@ class ItemsBrowseView(LoginRequiredMixin, views.ListView):
             )
 
         return items
+
+
+class LikedItemsView(LoginRequiredMixin, views.ListView):
+    template_name = "items/liked-items.html"
+    context_object_name = "liked_items"
+
+    def get_queryset(self):
+        return Item.objects.filter(likes__user=self.request.user)
