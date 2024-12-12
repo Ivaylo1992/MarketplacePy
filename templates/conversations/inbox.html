@@ -35,16 +35,16 @@
                         {% for conversation in object_list %}
                             <tr>
                                 <td class="align-middle">
-                                    {% if conversation.members.first.profile.profile_picture %}
-                                    <img src="{{ conversation.members.first.profile.profile_picture.url }}" alt=""
+                                    {% if conversation.members.last.profile.profile_picture %}
+                                    <img src="{{ conversation.members.last.profile.profile_picture.url }}" alt=""
                                          style="width: 50px;">
                                     {% else %}
                                     <img src="{% static 'img/no-profile.jpg' %}" alt=""
                                          style="width: 50px;">
                                     {% endif %}
-                                    <a href="{% url 'profile_details' pk=conversation.members.first.pk %}">
+                                    <a href="{% url 'profile_details' pk=conversation.members.last.pk %}">
                                         {% if not conversation.item.user == request.user %}Me{% else %}
-                                            {{ conversation.members.first.profile.get_name }}{% endif %}
+                                            {{ conversation.members.last.profile.get_name }}{% endif %}
                                     </a></td>
                                 <td class="align-middle">
                                     <img src="{{ conversation.item.photos.first.photo.url }}" alt=""

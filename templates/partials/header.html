@@ -103,7 +103,7 @@
                                     {% else %}
                                     <a href="{% url 'profile_details' request.user.pk%}" class="dropdown-item">Profile Details</a>
                                     <a href="{% url 'profile_edit' request.user.pk%}" class="dropdown-item">Edit Profile</a>
-                                    <a href="" class="dropdown-item">My Items</a>
+                                    <a href="{% url 'my_items' %}" class="dropdown-item">My Items</a>
                                     
                                         <form action="{% url 'logout' %}" method="post">
                                         <button class="btn-custom">Logout</button>

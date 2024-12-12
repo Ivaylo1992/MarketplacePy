@@ -109,6 +109,7 @@
                                         <a class="btn btn-outline-dark btn-square"
                                            href="{% url 'item_details' pk=item.pk %}"><i
                                                 class="fa fa-info"></i></a>
+                                    {% if request.user.is_authenticated %}
                                         <a class="btn btn-outline-dark btn-square like-btn"
                                            href="javascript:void(0)"
                                            data-item-id="{{ item.pk }}">
@@ -118,8 +119,8 @@
                                                 <i class="fas fa-heart"></i>
                                             {% endif %}
                                             <span class="like-count">{{ item.likes.count }}</span>
-                                            <!-- Optional like count -->
                                         </a>
+                                    {% endif %}
                                     </div>
                                 </div>
                                 <div class="text-center py-4">

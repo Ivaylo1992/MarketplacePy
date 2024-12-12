@@ -4,11 +4,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as views
 
+from MarketplacePy.conversations.models import Conversation
 from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, ItemPhotoEditForm, SearchItemForm, PriceRangeForm
 from MarketplacePy.items.models import Item, ItemPhoto, Category, ItemLike
 
 
-class ItemAddView(views.View):
+class ItemAddView(LoginRequiredMixin, views.View):
     template_name = 'items/item-add.html'
 
     def get_context_data(self, **kwargs):
@@ -46,19 +47,19 @@ class ItemAddView(views.View):
         ))
 
 
-class ItemDetailsView(views.DetailView):
+class ItemDetailsView(LoginRequiredMixin, views.DetailView):
     queryset = Item.objects.all() \
         .prefetch_related("photos")
 
     template_name = 'items/item-details.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["conversation"] = Conversation.objects.filter(
-    #         Q(members__in=[self.request.user, self.get_object().user]),
-    #         product=self.object,
-    #     ).first()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["conversation"] = Conversation.objects.filter(
+            Q(members__in=[self.request.user, self.get_object().user]),
+            item=self.object,
+        ).first()
+        return context
 
 
 class ItemEditView(LoginRequiredMixin, views.View):
@@ -75,10 +76,10 @@ class ItemEditView(LoginRequiredMixin, views.View):
 
     def get_context_data(self, **kwargs):
         context = {
-            'product': self.get_object(),
+            'item': self.get_object(),
             'images': self.get_object().photos.all(),
             'photo_form': ItemPhotoEditForm(),
-            'product_form': ItemAddForm(
+            'item_form': ItemAddForm(
                 instance=self.get_object()),
         }
 
@@ -89,10 +90,10 @@ class ItemEditView(LoginRequiredMixin, views.View):
 
     def post(self, request, *args, **kwargs):
         photo_form = ItemPhotoEditForm(request.POST, request.FILES)
-        product_form = ItemAddForm(request.POST, instance=self.get_context_data()['product'])
+        item_form = ItemAddForm(request.POST, instance=self.get_context_data()['item'])
 
-        if photo_form.is_valid() and product_form.is_valid():
-            item_instance = product_form.save(commit=False)
+        if photo_form.is_valid() and item_form.is_valid():
+            item_instance = item_form.save(commit=False)
 
             photo_form.save_photos(user=request.user, item=item_instance)
             if not photo_form.errors:
@@ -101,19 +102,19 @@ class ItemEditView(LoginRequiredMixin, views.View):
 
         return render(request, self.template_name, {
             'photo_form': photo_form,  # Pass the photo form with errors
-            'product_form': product_form,  # Pass the product form with errors
-            'item': self.get_object(),  # Pass the product for context
+            'item_form': item_form,  # Pass the product form with errors
+            'item': self.get_context_data()["item"],  # Pass the product for context
             'images': self.get_object().photos.all(),
         })
 
 
-class ItemDeleteView(views.DeleteView):
+class ItemDeleteView(LoginRequiredMixin, views.DeleteView):
     model = Item
     template_name = "items/item-delete.html"
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('home_page')
 
 
-class PhotoDeleteView(views.DeleteView):
+class PhotoDeleteView(LoginRequiredMixin, views.DeleteView):
     model = ItemPhoto
 
     def get_success_url(self):
@@ -123,7 +124,7 @@ class PhotoDeleteView(views.DeleteView):
         )
 
 
-class ItemsBrowseView(LoginRequiredMixin, views.ListView):
+class ItemsBrowseView(views.ListView):
     template_name = 'items/items-browse.html'
     paginate_by = 8
 
@@ -135,12 +136,15 @@ class ItemsBrowseView(LoginRequiredMixin, views.ListView):
         return context
 
     def get_queryset(self):
-        items = Item.objects.all()\
-            .annotate(
-            has_like=Exists(
-                ItemLike.objects.filter(item=OuterRef('pk'), user=self.request.user)
+        if self.request.user.is_authenticated:
+            items = Item.objects.all()\
+                .annotate(
+                has_like=Exists(
+                    ItemLike.objects.filter(item=OuterRef('pk'), user=self.request.user)
+                )
             )
-        )
+        else:
+            items = Item.objects.all()
 
         query = self.request.GET.get('query_param', '')
         category_id = self.request.GET.get('category', 0)
@@ -166,3 +170,11 @@ class LikedItemsView(LoginRequiredMixin, views.ListView):
 
     def get_queryset(self):
         return Item.objects.filter(likes__user=self.request.user)
+
+
+class AppUserProductsView(LoginRequiredMixin, views.ListView):
+    template_name = "items/my-items.html"
+    context_object_name = "my_items"
+
+    def get_queryset(self):
+        return Item.objects.filter(user=self.request.user)

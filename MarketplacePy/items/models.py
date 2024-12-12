@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator, MinLengthValidator, MaxVal
 from django.db import models
 
 from MarketplacePy.common.models import TimeStampedMixin, HasUser
+from MarketplacePy.items.validators import FileSizeValidator
 
 
 class Category(TimeStampedMixin):
@@ -82,11 +83,15 @@ class Item(TimeStampedMixin, HasUser):
 
 
 class ItemPhoto(TimeStampedMixin, HasUser):
+    MAX_PHOTO_SIZE_MB = 5
     MAX_PHOTOS = 10
     photo = CloudinaryField(
         "photo",
         null=False,
         blank=False,
+        validators=[
+            FileSizeValidator(MAX_PHOTO_SIZE_MB),
+        ]
     )
 
     item = models.ForeignKey(
