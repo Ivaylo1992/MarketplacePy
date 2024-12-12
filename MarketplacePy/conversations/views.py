@@ -16,7 +16,6 @@ class InboxView(LoginRequiredMixin, views.ListView):
     def get_queryset(self):
         return Conversation.objects.filter(
             members__in=[self.request.user],
-            is_deleted=False
         ).prefetch_related(
             "messages")
 

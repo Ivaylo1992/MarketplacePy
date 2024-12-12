@@ -17,12 +17,6 @@ class Conversation(TimeStampedMixin):
         related_name="conversations"
     )
 
-    is_deleted = models.BooleanField(
-        default=False,
-        null=False,
-        blank=True,
-    )
-
     class Meta:
         ordering = ["-updated_at"]
 
