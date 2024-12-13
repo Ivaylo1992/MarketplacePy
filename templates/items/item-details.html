@@ -10,7 +10,7 @@
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
                     <a class="breadcrumb-item text-dark" href="">Browse</a>
-                    <span class="breadcrumb-item active">Product Details</span>
+                    <span class="breadcrumb-item active">Item Details</span>
                 </nav>
             </div>
         </div>
@@ -56,14 +56,14 @@
                     <p class="mb-4" style="word-wrap: break-word">{{ item.description }}</p>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         {% if request.user == item.user %}
-                            <a href="{% url 'item_edit' pk=item.pk %}" class="btn btn-success px-3"><i class="fa fa-pencil mr-1"></i>Edit Product</a>
-                            <a href="{% url 'item_delete' pk=item.pk%}" class="btn btn-danger px-3"><i class="fa fa-trash mr-1"></i>Delete Product</a>
+                            <a href="{% url 'item_edit' pk=item.pk %}" class="btn btn-success px-3"><i class="fa fa-pencil mr-1"></i>Edit Item</a>
+                            <a href="{% url 'item_delete' pk=item.pk%}" class="btn btn-danger px-3"><i class="fa fa-trash mr-1"></i>Delete Item</a>
                         {% else %}
                             {% if not conversation %}
                         <a href="" class="btn btn-primary px-3">
                             <i class="fa fa-envelope mr-1"></i>Contact Seller</a>
                             {% else %}                                                                                                                                           
-                        <a href="{% url 'conversation_details' product_id=object.pk conversation_id=conversation.pk%}" class="btn btn-primary px-3">
+                        <a href="{% url 'conversation_details' item_id=object.pk conversation_id=conversation.pk%}" class="btn btn-primary px-3">
                             <i class="fa fa-envelope mr-1"></i>Continue Conversation</a>   
                             {% endif %}
                         {% endif %}
@@ -80,7 +80,7 @@
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
-                            <h4 class="mb-3">Product Description</h4>
+                            <h4 class="mb-3">Item Description</h4>
                             {{ item.description }}
                         </div>
                         

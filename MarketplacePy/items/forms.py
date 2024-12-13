@@ -1,3 +1,4 @@
+from cloudinary.exceptions import Error
 from django.core.exceptions import ValidationError
 
 from django import forms
@@ -62,6 +63,9 @@ class ItemPhotoAddForm(forms.Form):
                 photo_instances.append(photo_instance)
             except ValidationError as e:
                 self.add_error(None, e.message_dict)
+            except Error:
+                self.add_error(None, "Error uploading photo to Cloudinary.")
+
         return photo_instances
 
 
