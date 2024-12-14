@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='itemphoto',
             name='photo',
-            field=cloudinary.models.CloudinaryField(max_length=255, validators=[MarketplacePy.items.validators.FileSizeValidator(5)], verbose_name='photo'),
+            field=cloudinary.models.CloudinaryField(max_length=255, validators=[MarketplacePy.common.validators.FileSizeValidator(5)], verbose_name='photo'),
         ),
     ]

@@ -8,7 +8,7 @@
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
-                    <span class="breadcrumb-item active">Create Product</span>
+                    <span class="breadcrumb-item active">Create Item</span>
                 </nav>
             </div>
         </div>
@@ -25,9 +25,7 @@
                     <div id="success"></div>
                     <form method="post" action="{% url 'item_add' %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ product_form.as_p }}
-                            <h2>Upload Product Images</h2>
-                        {{ photo_form.as_p }}
+                        {{ form.as_p }}
                         <div>
                             <button class="btn btn-success py-2 px-4" type="submit" id="sendMessageButton">
                                 Create

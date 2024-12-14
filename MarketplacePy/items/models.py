@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MinLengthValidator, MaxVal
 from django.db import models
 
 from MarketplacePy.common.models import TimeStampedMixin, HasUser
-from MarketplacePy.items.validators import FileSizeValidator
+from MarketplacePy.common.validators import FileSizeValidator, validate_image_content
 
 
 class Category(TimeStampedMixin):
@@ -75,6 +75,12 @@ class Item(TimeStampedMixin, HasUser):
         related_name='items',
     )
 
+    main_photo = CloudinaryField(
+        'item_main_photo',
+        null=False,
+        blank=False,
+    )
+
     class Meta:
         ordering = ['-created_at']
 
@@ -91,6 +97,7 @@ class ItemPhoto(TimeStampedMixin, HasUser):
         blank=False,
         validators=[
             FileSizeValidator(MAX_PHOTO_SIZE_MB),
+            validate_image_content,
         ]
     )
 

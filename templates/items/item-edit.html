@@ -8,7 +8,7 @@
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
-                    <span class="breadcrumb-item active">Edit Product</span>
+                    <span class="breadcrumb-item active">Edit Item</span>
                 </nav>
             </div>
         </div>
@@ -18,47 +18,50 @@
 
     <!-- Contact Start -->
     <div class="container-fluid">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Edit Product</span>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Edit Item Details</span>
         </h2>
-        <form method="post" action="{% url 'item_edit' pk=item.pk %}" enctype="multipart/form-data">
             <div class="row px-xl-5">
                 <div class="col-lg-7 mb-5">
                     <div class="bg-light p-30 mb-30">
+                        <form method="post" action="{% url 'item_edit' pk=item.pk %}" enctype="multipart/form-data">
                         <h2>Edit Item Details</h2>
                         <div id="success"></div>
                         {% csrf_token %}
-                        {{ item_form.as_p }}
+                        {{ form.as_p }}
                         <div>
                             <button class="btn btn-success py-2 px-4" type="submit" id="sendMessageButton">
                                 Save Changes
                             </button>
                         </div>
+                            </form>
                     </div>
+                    
                 </div>
-                <div class="col-lg-5 mb-5">
-                    <div class="bg-light p-30 mb-30">
-                        <h2 class="title text-uppercase">Manage Photos</h2>
-                    </div>
-                    <div class="bg-light p-30 mb-30">
-                        {% if photo_form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {{ photo_form.non_field_errors }}
-                            </div>
-                        {% endif %}
-                        <h2>Upload Item Images</h2>
-                        {{ photo_form.as_p }}
-                        <button class="btn btn-success py-2 px-4" type="submit" id="sendMessageButton">
-                            Upload And Save
-                        </button>
-
-                    </div>
-                    <div class="bg-light p-30 mb-30">
-                        <h2>Current Photos</h2>
-                        {% include 'partials/item-photos.html' with photos=images %}
-                    </div>
-                </div>
+            
+{#                <div class="col-lg-5 mb-5">#}
+{#                    <div class="bg-light p-30 mb-30">#}
+{#                        <h2 class="title text-uppercase">Manage Photos</h2>#}
+{#                    </div>#}
+{#                    <div class="bg-light p-30 mb-30">#}
+{#                        {% if photo_form.non_field_errors %}#}
+{#                            <div class="alert alert-danger">#}
+{#                                {{ photo_form.non_field_errors }}#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        <h2>Upload Item Images</h2>#}
+{#                        {{ photo_form.as_p }}#}
+{#                        <button class="btn btn-success py-2 px-4" type="submit" id="sendMessageButton">#}
+{#                            Upload And Save#}
+{#                        </button>#}
+{##}
+{#                    </div>#}
+{#                    <div class="bg-light p-30 mb-30">#}
+{#                        <h2>Current Photos</h2>#}
+{#                        {% include 'partials/item-photos.html' with photos=images %}#}
+{#                    </div>#}
+{#                </div>#}
             </div>
-        </form>
+        
     </div>
 
     <!-- Contact End -->

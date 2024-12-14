@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
+from PIL import Image
 
 
 @deconstructible
@@ -22,3 +23,12 @@ class FileSizeValidator:
     def __call__(self, value):
         if value.size > self.file_size_mb * 1024 * 1024:
             raise ValidationError(self.message)
+
+
+def validate_image_content(file):
+    try:
+        # Open the file to verify its content
+        img = Image.open(file)
+        img.verify()  # Verify that it is, indeed, an image
+    except (IOError, SyntaxError):
+        raise ValidationError("The uploaded file is not a valid image.")

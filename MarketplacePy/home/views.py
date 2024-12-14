@@ -9,6 +9,7 @@ from MarketplacePy.items.models import Category, Item, ItemLike
 class HomePageView(views.ListView):
     queryset = Category.objects.prefetch_related(
         "items",
+        "items__photos"
     ).all()
     template_name = "home/home-page.html"
 

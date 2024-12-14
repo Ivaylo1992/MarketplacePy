@@ -22,49 +22,30 @@
     <div class="container-fluid pb-5">
         <div class="row px-xl-5">
             <div class="col-lg-5 mb-30">
-                <div id="product-carousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner bg-light">
-                        {% for photo in item.photos.all %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <img class="w-100 h-100" src="{{ photo.photo.url }}" alt="Image">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                        <i class="fa fa-2x fa-angle-left text-dark"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                        <i class="fa fa-2x fa-angle-right text-dark"></i>
-                    </a>
-                </div>
+                <img class="img-fluid" src="{{ item.main_photo.url }}" alt="Product">
             </div>
 
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
                     <h3>{{ item.name }}</h3>
-                    <div class="d-flex mb-3">
-                        <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star-half-alt"></small>
-                            <small class="far fa-star"></small>
-                        </div>
-                        <small class="pt-1">(99 Reviews)</small>
-                    </div>
                     <h3 class="font-weight-semi-bold mb-4">${{ item.price|floatformat:2 }}</h3>
                     <p class="mb-4" style="word-wrap: break-word">{{ item.description }}</p>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         {% if request.user == item.user %}
-                            <a href="{% url 'item_edit' pk=item.pk %}" class="btn btn-success px-3"><i class="fa fa-pencil mr-1"></i>Edit Item</a>
-                            <a href="{% url 'item_delete' pk=item.pk%}" class="btn btn-danger px-3"><i class="fa fa-trash mr-1"></i>Delete Item</a>
+                            <a href="{% url 'item_edit' pk=item.pk %}" class="btn btn-success px-3 m-lg-1"><i></i>Edit
+                                Item Info</a>
+                            <a href="{% url 'photo_add' pk=item.pk %}" class="btn btn-success px-3"><i></i>Ad More Item
+                                Photos</a>
+                            <a href="{% url 'item_delete' pk=item.pk %}" class="btn btn-danger px-3 m-lg-1"><i
+                                    class="fa fa-trash mr-1"></i>Delete Item</a>
                         {% else %}
                             {% if not conversation %}
-                        <a href="" class="btn btn-primary px-3">
-                            <i class="fa fa-envelope mr-1"></i>Contact Seller</a>
-                            {% else %}                                                                                                                                           
-                        <a href="{% url 'conversation_details' item_id=object.pk conversation_id=conversation.pk%}" class="btn btn-primary px-3">
-                            <i class="fa fa-envelope mr-1"></i>Continue Conversation</a>   
+                                <a href="{% url 'send_message' item.pk%}" class="btn btn-primary px-3">
+                                    <i class="fa fa-envelope mr-1"></i>Contact Seller</a>
+                            {% else %}
+                                <a href="{% url 'conversation_details' item_id=object.pk conversation_id=conversation.pk %}"
+                                   class="btn btn-primary px-3">
+                                    <i class="fa fa-envelope mr-1"></i>Continue Conversation</a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -75,21 +56,24 @@
             <div class="col">
                 <div class="bg-light p-30">
                     <div class="nav nav-tabs mb-4">
-                        <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                        <a class="nav-item nav-link text-dark active" data-toggle="tab"
+                           href="#tab-pane-1">Description</a>
                         <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Reviews (0)</a>
+                        <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">More photos</a>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="tab-pane-1">
                             <h4 class="mb-3">Item Description</h4>
                             {{ item.description }}
                         </div>
-                        
+
                         <div class="tab-pane fade" id="tab-pane-2">
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="mb-4">1 review for {{ item.name }}</h4>
                                     <div class="media mb-4">
-                                        <img src="{% static 'img/no-profile.jpg' %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                        <img src="{% static 'img/no-profile.jpg' %}" alt="Image"
+                                             class="img-fluid mr-3 mt-1" style="width: 45px;">
                                         <div class="media-body">
                                             <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                             <div class="text-primary mb-2">
@@ -99,13 +83,16 @@
                                                 <i class="fas fa-star-half-alt"></i>
                                                 <i class="far fa-star"></i>
                                             </div>
-                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
+                                                ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
+                                                ipsum.</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked *</small>
+                                    <small>Your email address will not be published. Required fields are marked
+                                        *</small>
                                     <div class="d-flex my-3">
                                         <p class="mb-0 mr-2">Your Rating * :</p>
                                         <div class="text-primary">
@@ -136,10 +123,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="tab-pane-3">
+                            <h4 class="mb-3">Item Photos</h4>
+                            <div class="row">
+                                {% for photo in item.photos.all %}
+                                    <div class="col-md-3 mb-3">
+                                        <img src="{{ photo.photo.url }}" class="img-fluid" alt="Item Image">
+                                    </div>
+                                    {% empty %}
+                                    <p>No additional photos available for this item.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Shop Detail End -->
-{% endblock %}    
+        <!-- Shop Detail End -->
+{% endblock %}

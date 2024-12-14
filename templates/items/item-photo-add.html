@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
+                    <span class="breadcrumb-item active">Add More Photos</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-fluid">
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Add More Photos</span>
+        </h2>
+            <div class="row px-xl-5">
+
+                <div class="col-lg-5 mb-5">
+                    <div class="bg-light p-30 mb-30">
+                        <h2 class="title text-uppercase">Manage Photos</h2>
+                    </div>
+                    <div class="bg-light p-30 mb-30">
+                        <form action="{% url 'photo_add' item.pk%}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if photo_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        <h2>Upload Item Photos</h2>
+                        {{ form.as_p }}
+                        <button class="btn btn-success py-2 px-4" type="submit" id="sendMessageButton">
+                            Upload And Save
+                        </button>
+                    </form>
+                    </div>
+                    <div class="bg-light p-30 mb-30">
+                        <h2>Current Photos</h2>
+                        {% include 'partials/item-photos.html' with photos=photos %}
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+    <!-- Contact End -->
+
+{% endblock %}

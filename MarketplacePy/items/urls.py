@@ -9,9 +9,10 @@ urlpatterns = (
         path("", views.ItemDetailsView.as_view(), name="item_details"),
         path("edit/", views.ItemEditView.as_view(), name="item_edit"),
         path("delete/", views.ItemDeleteView.as_view(), name="item_delete"),
+        path("photo/add/", views.AddItemPhotoView.as_view(), name="photo_add"),
     ])),
     path("photos/<int:pk>/delete/", views.PhotoDeleteView.as_view(), name="photo_delete"),
     path("liked_items/", views.LikedItemsView.as_view(), name="liked_items"),
-    path("my_items/", views.AppUserProductsView.as_view(), name="my_items"),
+    path("my_items/", views.AppUserItemsView.as_view(), name="my_items"),
 )
 

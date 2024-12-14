@@ -47,7 +47,7 @@
                                             {{ conversation.members.last.profile.get_name }}{% endif %}
                                     </a></td>
                                 <td class="align-middle">
-                                    <img src="{{ conversation.item.photos.first.photo.url }}" alt=""
+                                    <img src="{{ conversation.item.main_photo.url }}" alt=""
                                          style="width: 50px;">
                                     <a href="{% url 'item_details' conversation.item.pk %}">{{ conversation.item }}</a>
                                 </td>

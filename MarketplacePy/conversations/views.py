@@ -44,7 +44,6 @@ class SendMessageView(LoginRequiredMixin, views.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["item"] = Item.objects.get(id=self.kwargs["item_id"])
-        context["item_photo"] = context["item"].photos.first()
         return context
 
     def get_success_url(self):
@@ -69,6 +68,5 @@ class ConversationDetailView(LoginRequiredMixin, views.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["item"] = Item.objects.get(id=self.kwargs["item_id"])
-        context["item_photo"] = context["item"].photos.first()
         context["form"] = SendMessageForm
         return context

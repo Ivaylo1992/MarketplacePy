@@ -40,14 +40,21 @@ class ItemAddForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ['name', 'price', 'description', 'category']
+        fields = ["name", "price", "description", "category", "main_photo"]
+        labels = {
+            "main_photo": "Item Main Photo",
+        }
+
+
+class ItemEditForm(ItemAddForm):
+    ...
 
 
 class ItemPhotoAddForm(forms.Form):
     photo = MultipleImageField()
 
     def save_photos(self, user, item):
-        photos = self.files.getlist('photo')
+        photos = self.files.getlist("photo")
         photo_instances = []
 
         for photo in photos:
@@ -70,7 +77,7 @@ class ItemPhotoAddForm(forms.Form):
 
 
 class ItemPhotoEditForm(ItemPhotoAddForm):
-    photo = MultipleImageField(required=False)
+    ...
 
 
 class SearchItemForm(forms.Form):

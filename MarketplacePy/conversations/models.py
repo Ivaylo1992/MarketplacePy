@@ -31,7 +31,7 @@ class Message(HasUser, TimeStampedMixin):
     content = models.TextField()
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["created_at"]
 
     def __str__(self):
         return f"Message by {self.user.username} in conversation {self.conversation}"

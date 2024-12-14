@@ -7,7 +7,7 @@
         <div class="row px-xl-5">
             <div class="col-12">
                 <nav class="breadcrumb bg-light mb-30">
-                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'home_page' %}">Home</a>
                     <a class="breadcrumb-item text-dark" href="{% url 'profile_details' request.user.pk%}">Profile</a>
                     <span class="breadcrumb-item active">Liked Items</span>
                 </nav>
@@ -33,7 +33,7 @@
                     <tbody class="align-middle">
                     {% for item in liked_items %}
                         <tr>
-                            <td class="align-middle"><img src="{{ item.photos.first.photo.url }}" alt=""
+                            <td class="align-middle"><img src="{{ item.main_photo.url }}" alt=""
                                                           style="width: 50px;">
                                 <a href="{% url 'item_details' item.pk%}">{{ item.name }}</a>
                             </td>
