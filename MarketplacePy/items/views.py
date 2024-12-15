@@ -31,7 +31,8 @@ class ItemDetailsView(LoginRequiredMixin, views.DetailView):
         context = super().get_context_data(**kwargs)
 
         context["conversation"] = Conversation.objects.filter(
-            Q(members__in=[self.request.user, self.get_object().user]),
+            sender=self.request.user,
+            recipient=self.object.user,
             item=self.object,
         ).first()
 

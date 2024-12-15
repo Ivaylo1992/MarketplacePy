@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views import generic as views
 
@@ -15,9 +15,8 @@ class InboxView(LoginRequiredMixin, views.ListView):
 
     def get_queryset(self):
         return Conversation.objects.filter(
-            members__in=[self.request.user],
-        ).prefetch_related(
-            "messages")
+            Q(recipient=self.request.user) | Q(sender=self.request.user)
+        )
 
 
 class SendMessageView(LoginRequiredMixin, views.CreateView):
@@ -26,13 +25,22 @@ class SendMessageView(LoginRequiredMixin, views.CreateView):
 
     def get_object(self, queryset=None):
         item = self.get_context_data()['item']
-        members = (self.request.user, item.user)
+        sender = self.request.user
+        recipient = item.user
 
-        conversation = Conversation.objects.filter(members__in=members, item=item).first()
+        conversation = Conversation.objects.filter(
+            sender=sender,
+            recipient=recipient,
+            item=item
+        ).first()
+
         # Creates a new Conversation if it doesn't already exist
         if not conversation:
-            conversation = Conversation.objects.create(item=item)
-            conversation.members.add(*members)
+            conversation = Conversation.objects.create(
+                sender=sender,
+                recipient=recipient,
+                item=item,
+            )
 
         return conversation
 
@@ -66,7 +74,8 @@ class ConversationDetailView(LoginRequiredMixin, UserPassesTestMixin, views.Deta
     template_name = "conversations/conversation-details.html"
 
     def test_func(self):
-        return self.request.user in self.get_object().members.all()
+        return self.request.user == self.get_object().sender \
+            or self.request.user == self.get_object().recipent
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

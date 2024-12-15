@@ -12,9 +12,16 @@ class Conversation(TimeStampedMixin):
         on_delete=models.CASCADE
     )
 
-    members = models.ManyToManyField(
+    sender = models.ForeignKey(
         to=UserModel,
-        related_name="conversations"
+        on_delete=models.CASCADE,
+        related_name="sent_conversations"
+    )
+
+    recipient = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+        related_name="received_conversations"
     )
 
     class Meta:
