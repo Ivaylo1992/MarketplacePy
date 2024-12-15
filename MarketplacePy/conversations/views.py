@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic as views
@@ -58,12 +58,15 @@ class SendMessageView(LoginRequiredMixin, views.CreateView):
         return result
 
 
-class ConversationDetailView(LoginRequiredMixin, views.DetailView):
+class ConversationDetailView(LoginRequiredMixin, UserPassesTestMixin, views.DetailView):
     queryset = Conversation.objects.all() \
         .prefetch_related("messages")
 
     pk_url_kwarg = "conversation_id"
     template_name = "conversations/conversation-details.html"
+
+    def test_func(self):
+        return self.request.user in self.get_object().members.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

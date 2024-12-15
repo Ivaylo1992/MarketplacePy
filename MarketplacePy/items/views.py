@@ -1,11 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Exists, Q, OuterRef
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic as views
 
 from MarketplacePy.conversations.models import Conversation
-from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, ItemPhotoEditForm, SearchItemForm, PriceRangeForm, \
+from MarketplacePy.items.forms import ItemPhotoAddForm, ItemAddForm, SearchItemForm, PriceRangeForm, \
     ItemEditForm
 from MarketplacePy.items.models import Item, ItemPhoto, Category, ItemLike
 
@@ -38,10 +38,14 @@ class ItemDetailsView(LoginRequiredMixin, views.DetailView):
         return context
 
 
-class ItemEditView(LoginRequiredMixin, views.UpdateView):
+class ItemEditView(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     model = Item
     form_class = ItemEditForm
     template_name = "items/item-edit.html"
+
+    def test_func(self):
+        user = self.get_object().user
+        return self.request.user == user
 
     def get_success_url(self):
         return reverse_lazy(
@@ -50,7 +54,7 @@ class ItemEditView(LoginRequiredMixin, views.UpdateView):
         )
 
 
-class AddItemPhotoView(LoginRequiredMixin, views.FormView):
+class AddItemPhotoView(LoginRequiredMixin, UserPassesTestMixin, views.FormView):
     form_class = ItemPhotoAddForm
     template_name = "items/item-photo-add.html"
 
@@ -87,6 +91,10 @@ class AddItemPhotoView(LoginRequiredMixin, views.FormView):
 
         return context
 
+    def test_func(self):
+        user = self.get_context_data()["item"].user
+        return self.request.user == user
+
     def get_success_url(self):
         return reverse_lazy(
             "photo_add",
@@ -94,14 +102,22 @@ class AddItemPhotoView(LoginRequiredMixin, views.FormView):
         )
 
 
-class ItemDeleteView(LoginRequiredMixin, views.DeleteView):
+class ItemDeleteView(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     model = Item
     template_name = "items/item-delete.html"
     success_url = reverse_lazy("home_page")
 
+    def test_func(self):
+        user = self.get_object().user
+        return self.request.user == user
 
-class PhotoDeleteView(LoginRequiredMixin, views.DeleteView):
+
+class PhotoDeleteView(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     model = ItemPhoto
+
+    def test_func(self):
+        user = self.get_object().user
+        return self.request.user == user
 
     def get_success_url(self):
         return reverse_lazy(

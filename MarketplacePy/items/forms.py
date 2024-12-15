@@ -76,10 +76,6 @@ class ItemPhotoAddForm(forms.Form):
         return photo_instances
 
 
-class ItemPhotoEditForm(ItemPhotoAddForm):
-    ...
-
-
 class SearchItemForm(forms.Form):
     query_param = forms.CharField(
         label="",
