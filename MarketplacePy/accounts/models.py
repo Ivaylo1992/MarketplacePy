@@ -4,6 +4,7 @@ from django.contrib.auth import models as auth_models, get_user_model
 
 from MarketplacePy.accounts.managers import AppUserManager
 from MarketplacePy.accounts.validators import FirstCapitalValidator
+from MarketplacePy.common.validators import FileSizeValidator, validate_image_content
 
 
 class AppUser(auth_models.AbstractBaseUser, auth_models.PermissionsMixin):
@@ -47,6 +48,7 @@ class Profile(models.Model):
     FIRST_NAME_MAX_LENGTH = 30
     LAST_NAME_MAX_LENGTH = 30
     LOCATION_MAX_LENGTH = 20
+    MAX_PHOTO_SIZE_MB = 5
 
     user = models.OneToOneField(
         to=UserModel,
@@ -82,6 +84,10 @@ class Profile(models.Model):
         'profile picture',
         blank=True,
         null=True,
+        validators=[
+            FileSizeValidator(MAX_PHOTO_SIZE_MB),
+            validate_image_content,
+        ]
     )
 
     def get_name(self):

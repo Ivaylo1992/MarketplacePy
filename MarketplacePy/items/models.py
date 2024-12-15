@@ -6,6 +6,8 @@ from django.db import models
 from MarketplacePy.common.models import TimeStampedMixin, HasUser
 from MarketplacePy.common.validators import FileSizeValidator, validate_image_content
 
+MAX_PHOTO_SIZE_MB = 5
+
 
 class Category(TimeStampedMixin):
     CATEGORY_NAME_MAX_LENGTH = 100
@@ -21,6 +23,10 @@ class Category(TimeStampedMixin):
         'category_image',
         null=True,
         blank=True,
+        validators=[
+            FileSizeValidator(MAX_PHOTO_SIZE_MB),
+            validate_image_content,
+        ]
     )
 
     class Meta:
@@ -79,6 +85,10 @@ class Item(TimeStampedMixin, HasUser):
         'item_main_photo',
         null=False,
         blank=False,
+        validators=[
+            FileSizeValidator(MAX_PHOTO_SIZE_MB),
+            validate_image_content,
+        ]
     )
 
     class Meta:
@@ -89,7 +99,6 @@ class Item(TimeStampedMixin, HasUser):
 
 
 class ItemPhoto(TimeStampedMixin, HasUser):
-    MAX_PHOTO_SIZE_MB = 5
     MAX_PHOTOS = 10
     photo = CloudinaryField(
         "photo",
