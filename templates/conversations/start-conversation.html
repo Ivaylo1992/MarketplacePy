@@ -24,7 +24,7 @@
             <div class="col-lg-7 mb-5">
                 <div class="contact-form bg-light p-30">
                     <div id="success"></div>
-                    <form method="post" action="{% url 'send_message' item_id=item.pk%}">
+                    <form method="post" action="{% url 'send_message' item_id=item.pk %}">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <div>

@@ -12,16 +12,9 @@ class Conversation(TimeStampedMixin):
         on_delete=models.CASCADE
     )
 
-    sender = models.ForeignKey(
+    members = models.ManyToManyField(
         to=UserModel,
-        on_delete=models.CASCADE,
-        related_name="sent_conversations"
-    )
-
-    recipient = models.ForeignKey(
-        to=UserModel,
-        on_delete=models.CASCADE,
-        related_name="received_conversations"
+        related_name="conversations",
     )
 
     class Meta:
@@ -42,4 +35,3 @@ class Message(HasUser, TimeStampedMixin):
 
     def __str__(self):
         return f"Message by {self.user.username} in conversation {self.conversation}"
-

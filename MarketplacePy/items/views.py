@@ -31,10 +31,11 @@ class ItemDetailsView(LoginRequiredMixin, views.DetailView):
         context = super().get_context_data(**kwargs)
 
         context["conversation"] = Conversation.objects.filter(
-            sender=self.request.user,
-            recipient=self.object.user,
+            members=self.request.user,
             item=self.object,
-        ).first()
+        ).filter(
+            members=self.object.user
+        ).distinct().first()
 
         return context
 

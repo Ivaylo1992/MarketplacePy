@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -36,6 +37,20 @@ class AppUserLogoutView(auth_views.LogoutView):
 class ProfileDetailsView(LoginRequiredMixin, views.DetailView):
     queryset = Profile.objects.all()
     template_name = "accounts/profile-details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        items_per_page = 4
+        profile = self.object
+        items = profile.user.item_set.all()
+
+        # Paginate items
+        paginator = Paginator(items, items_per_page)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['page_obj'] = page_obj
+        return context
 
 
 class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):

@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-    <!-- Breadcrumb Start -->
     <div class="container-fluid">
         <div class="row px-xl-5">
             <div class="col-12">
@@ -13,11 +12,9 @@
             </div>
         </div>
     </div>
-    <!-- Breadcrumb End -->
 
-
-    <!-- Cart Start -->
     <div class="container-fluid">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Inbox</span></h2>
         <div class="row px-xl-5">
             <div class="col-lg-7 table-responsive mb-5">
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
@@ -35,16 +32,16 @@
                         {% for conversation in object_list %}
                             <tr>
                                 <td class="align-middle">
-                                    {% if conversation.sender.profile.profile_picture %}
-                                    <img src="{{ conversation.sender.profile.profile_picture.url }}" alt=""
-                                         style="width: 50px;">
+                                    {% if conversation.members.last.profile.profile_picture %}
+                                        <img src="{{ conversation.members.last.profile.profile_picture.url }}" alt=""
+                                             style="width: 50px;">
                                     {% else %}
-                                    <img src="{% static 'img/no-profile.jpg' %}" alt=""
-                                         style="width: 50px;">
+                                        <img src="{% static 'img/no-profile.jpg' %}" alt=""
+                                             style="width: 50px;">
                                     {% endif %}
-                                    <a href="{% url 'profile_details' pk=conversation.sender.pk %}">
-                                        {% if conversation.sender == request.user %}Me{% else %}
-                                            {{ conversation.sender.profile.get_name }}{% endif %}
+                                    <a href="{% url 'profile_details' pk=conversation.members.last.pk %}">
+                                        {% if conversation.members.last == request.user %}Me{% else %}
+                                            {{ conversation.members.last.profile.get_name }}{% endif %}
                                     </a></td>
                                 <td class="align-middle">
                                     <img src="{{ conversation.item.main_photo.url }}" alt=""
@@ -66,18 +63,18 @@
                     </table>
                 </div>
             </div>
-        <div class="col-lg-5 mb-5">
-            <div class="bg-light p-30 mb-30">
-                <div class="product-offer mb-30" style="height: 300px;">
-                    <img class="img-fluid" src="{% static 'img/buy.png' %}" alt="">
-                    <div class="offer-text">
-                        <h3 class="text-white mb-3">Find Your Next Treasure</h3>
-                        <a href="" class="btn btn-primary">Browse Now</a>
+            <div class="col-lg-5 mb-5">
+                <div class="bg-light p-30 mb-30">
+                    <div class="product-offer mb-30" style="height: 300px;">
+                        <img class="img-fluid" src="{% static 'img/buy.png' %}" alt="">
+                        <div class="offer-text">
+                            <h3 class="text-white mb-3">Find Your Next Treasure</h3>
+                            <a href="" class="btn btn-primary">Browse Now</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-    <!-- Cart End -->
+
 {% endblock %}
