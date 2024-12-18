@@ -6,7 +6,7 @@ likeBtns.forEach(btn => {
         const itemId = this.dataset.itemId;
 
         // Send the AJAX request to toggle like
-        fetch(`/api/like/${itemId}/`, {
+        fetch(`/items_api/like/${itemId}/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -3,6 +3,8 @@
 {% block content %}
     {% load cloudinary %}
     <script src="{% static 'js/like.js' %}"></script>
+    <script src="{% static 'js/review.js' %}"></script>
+
 
     <!-- Breadcrumb Start -->
     <div class="container-fluid">
@@ -34,13 +36,17 @@
                     <h3>{{ profile.get_name }}</h3>
                     <div class="d-flex mb-3">
                         <div class="text-primary mr-2">
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star"></small>
-                            <small class="fas fa-star-half-alt"></small>
-                            <small class="far fa-star"></small>
+                            {% for _ in full_stars_list %}
+                                <small class="fas fa-star"></small>
+                            {% endfor %}
+                            {% for _ in half_star_list %}
+                                <small class="fas fa-star-half-alt"></small>
+                            {% endfor %}
+                            {% for _ in empty_stars_list %}
+                                <small class="far fa-star"></small>
+                            {% endfor %}
                         </div>
-                        <small class="pt-1">(99 Reviews)</small>
+                        <small class="pt-1">({{ profile.user.received_reviews.count }} Reviews)</small>
                     </div>
                     <h3 class="font-weight-semi-bold mb-4">Total Items: {{ profile.user.item_set.count }}</h3>
                     <div class="d-flex mb-3">
@@ -80,9 +86,9 @@
                             <div class="container-fluid py-5">
                                 <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
                                     {% if request.user == object.user %}
-                                    <span class="bg-secondary pr-3">My Products</span>
+                                        <span class="bg-secondary pr-3">My Products</span>
                                     {% else %}
-                                    <span class="bg-secondary pr-3">Seller's Products</span>
+                                        <span class="bg-secondary pr-3">Seller's Products</span>
                                     {% endif %}
                                 </h2>
                                 <div class="row px-xl-5">
@@ -161,37 +167,29 @@
                                                 <i class="far fa-star"></i>
                                             </div>
                                             <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam
-                                                ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod
-                                                ipsum.</p>
+                                                ipsum et no at.</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
-                                    <small>Your email address will not be published. Required fields are marked
-                                        *</small>
                                     <div class="d-flex my-3">
                                         <p class="mb-0 mr-2">Your Rating * :</p>
-                                        <div class="text-primary">
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
-                                            <i class="far fa-star"></i>
+                                        <div id="star-rating" class="text-primary">
+                                            <i class="far fa-star" data-value="1"></i>
+                                            <i class="far fa-star" data-value="2"></i>
+                                            <i class="far fa-star" data-value="3"></i>
+                                            <i class="far fa-star" data-value="4"></i>
+                                            <i class="far fa-star" data-value="5"></i>
                                         </div>
                                     </div>
-                                    <form>
+                                    <form id="review-form" action="{% url 'user-review' profile.user.id %}"
+                                          method="POST" data-reviewed-user-id="{{ profile.user.id }}">
+                                        <input type="hidden" id="rating" name="rating" value="0">
                                         <div class="form-group">
                                             <label for="message">Your Review *</label>
-                                            <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="name">Your Name *</label>
-                                            <input type="text" class="form-control" id="name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Your Email *</label>
-                                            <input type="email" class="form-control" id="email">
+                                            <textarea id="message" name="comment" cols="30" rows="5"
+                                                      class="form-control"></textarea>
                                         </div>
                                         <div class="form-group mb-0">
                                             <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
@@ -206,5 +204,6 @@
         </div>
     </div>
     <!-- Shop Detail End -->
+
 
 {% endblock %}    

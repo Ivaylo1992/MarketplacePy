@@ -96,3 +96,44 @@ class Profile(models.Model):
         elif self.first_name or self.last_name:
             return self.first_name or self.last_name
         return self.user.email
+
+
+class UserReview(models.Model):
+    class RatingChoices(models.IntegerChoices):
+        ONE = 1, '1 Star'
+        TWO = 2, '2 Stars'
+        THREE = 3, '3 Stars'
+        FOUR = 4, '4 Stars'
+        FIVE = 5, '5 Stars'
+
+    reviewer = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+        related_name='given_reviews'
+    )
+
+    reviewed_user = models.ForeignKey(
+        to=UserModel,
+        on_delete=models.CASCADE,
+        related_name='received_reviews'
+    )
+
+    rating = models.SmallIntegerField(
+        choices=RatingChoices.choices,
+        default=RatingChoices.FIVE,
+    )
+
+    comment = models.TextField(
+        max_length=500,
+        blank=True,
+        null=True,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('reviewer', 'reviewed_user')
+
+    def __str__(self):
+        return f"{self.reviewer} rated {self.reviewed_user} {self.rating} Stars"
+
