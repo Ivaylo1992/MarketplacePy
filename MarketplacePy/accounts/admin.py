@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
 from MarketplacePy.accounts.forms import AppUserCreationForm, AppUserChangeForm
 from MarketplacePy.accounts.models import AppUser, Profile, UserReview
@@ -7,17 +8,17 @@ from MarketplacePy.accounts.models import AppUser, Profile, UserReview
 UserModel = get_user_model()
 
 
-@admin.register(AppUser)
-class AppUserAdmin(admin.ModelAdmin):
+@admin.register(UserModel)
+class AppUserAdmin(UserAdmin):
     model = UserModel
     add_form = AppUserCreationForm
     form = AppUserChangeForm
 
     fieldsets = (
-        (None, {"fields": ("email", "password",)}),
-        ("Permissions", {
-            "fields": ("is_staff", "is_superuser", "groups", "user_permissions")}),
-        ("Important dates", {"fields": ("last_login", "date_joined",)}),
+        (None, {'fields': ('email', 'password')}),
+        ('Personal info', {'fields': ()}),  # Remove this if you have no personal info fields.
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
     add_fieldsets = (
@@ -26,7 +27,7 @@ class AppUserAdmin(admin.ModelAdmin):
                 "classes": ("wide",),
                 "fields": ("email", "password1", "password2"),
             }
-        )
+        ),
     )
 
     list_display = ("pk", "email", "is_staff", "is_superuser")
@@ -35,7 +36,7 @@ class AppUserAdmin(admin.ModelAdmin):
 
     ordering = ("pk",)
 
-    readonly_fields = ("last_login", "date_joined",)
+    readonly_fields = ("last_login", "date_joined")
 
 
 @admin.register(Profile)
