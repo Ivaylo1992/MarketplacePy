@@ -20,6 +20,8 @@ class Conversation(TimeStampedMixin):
     class Meta:
         ordering = ["-updated_at"]
 
+    def __str__(self):
+        return f"Conversation ID{self.id} for {self.item.name}"
 
 class Message(HasUser, TimeStampedMixin):
     conversation = models.ForeignKey(
@@ -34,4 +36,4 @@ class Message(HasUser, TimeStampedMixin):
         ordering = ["created_at"]
 
     def __str__(self):
-        return f"Message by {self.user.username} in conversation {self.conversation}"
+        return f"Message by {self.user.profile.get_name} in conversation {self.conversation}"
