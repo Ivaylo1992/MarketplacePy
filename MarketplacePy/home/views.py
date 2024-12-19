@@ -1,9 +1,7 @@
-from django.db.models import Exists, OuterRef
-from django.shortcuts import render
 from django.views import generic as views
 
 from MarketplacePy.accounts.models import AppUser
-from MarketplacePy.items.models import Category, Item, ItemLike
+from MarketplacePy.items.models import Category, Item
 
 
 class HomePageView(views.ListView):

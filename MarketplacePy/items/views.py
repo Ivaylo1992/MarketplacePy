@@ -13,7 +13,7 @@ from MarketplacePy.items.models import Item, ItemPhoto, Category, ItemLike
 class ItemAddView(LoginRequiredMixin, views.CreateView):
     model = Item
     form_class = ItemAddForm
-    success_url = reverse_lazy("home_page")
+    success_url = reverse_lazy("my_items")
     template_name = "items/item-add.html"
 
     def form_valid(self, form):
@@ -107,7 +107,7 @@ class AddItemPhotoView(LoginRequiredMixin, UserPassesTestMixin, views.FormView):
 class ItemDeleteView(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     model = Item
     template_name = "items/item-delete.html"
-    success_url = reverse_lazy("home_page")
+    success_url = reverse_lazy("my_items")
 
     def test_func(self):
         user = self.get_object().user

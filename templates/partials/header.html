@@ -88,6 +88,7 @@
                         <a href="{% url 'inbox' %}" class="nav-item nav-link">
                             <i class="fa fa-solid fa-envelope"></i>
                             Inbox
+                            <strong>{{ request.user.conversations.count }}</strong>
                         </a>
                         <a href="{% url 'item_add' %}" class="nav-item nav-link">
                             <i class="fa fa-solid fa-plus"></i>

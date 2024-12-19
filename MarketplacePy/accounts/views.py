@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import Paginator
-from django.db.models import Avg
+from django.db.models import Avg, F
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
@@ -36,7 +36,10 @@ class AppUserLogoutView(auth_views.LogoutView):
 
 
 class ProfileDetailsView(LoginRequiredMixin, views.DetailView):
-    queryset = Profile.objects.all().prefetch_related("user")
+    queryset = Profile.objects.all()\
+        .prefetch_related("user__item_set")\
+        .prefetch_related("user__received_reviews")
+
     template_name = "accounts/profile-details.html"
 
     def get_context_data(self, **kwargs):
@@ -53,7 +56,8 @@ class ProfileDetailsView(LoginRequiredMixin, views.DetailView):
         page_obj = paginator.get_page(page_number)
 
         # Calculate average rating
-        average_rating = profile.user.received_reviews.aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
+        average_rating = profile.user.received_reviews\
+            .aggregate(avg_rating=Avg('rating'))['avg_rating'] or 0
         full_stars = int(average_rating)  # Number of full stars
         half_star = 1 if (average_rating - full_stars) >= 0.5 else 0  # Half star if applicable
         empty_stars = 5 - (full_stars + half_star)  # Remaining empty stars
@@ -63,8 +67,25 @@ class ProfileDetailsView(LoginRequiredMixin, views.DetailView):
         half_star_list = range(half_star)
         empty_stars_list = range(empty_stars)
 
+        # Get received reviews for the user and calculate stars for each review
+        received_reviews = profile.user.received_reviews.annotate(
+            empty_star=5 - F("rating"),
+        )
+
+        reviews_with_stars = []
+        for review in received_reviews:
+            review_rating = review.rating
+            review_full_stars = int(review_rating)
+            review_empty_stars = 5 - review_full_stars
+            reviews_with_stars.append({
+                'review': review,
+                'full_stars': range(review_full_stars),
+                'empty_stars': range(review_empty_stars),
+            })
+
         # Add to context
         context.update({
+            'reviews': reviews_with_stars,
             'page_obj': page_obj,
             'full_stars_list': full_stars_list,
             'half_star_list': half_star_list,

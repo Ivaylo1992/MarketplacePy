@@ -41,6 +41,7 @@
                     
                     {% for category in categories %}
                         <div style="max-height: 250px; overflow-y: auto;">
+                        <img src="{{ category.category_image.url }}" alt="{{ category.name }}" style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;">
                             <a style="color: black"
                                href="{% url 'items_browse' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}
                             </a>

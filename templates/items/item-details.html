@@ -34,8 +34,7 @@
                         {% if request.user == item.user %}
                             <a href="{% url 'item_edit' pk=item.pk %}" class="btn btn-success px-3 m-lg-1"><i></i>Edit
                                 Item Info</a>
-                            <a href="{% url 'photo_add' pk=item.pk %}" class="btn btn-success px-3"><i></i>Ad More Item
-                                Photos</a>
+                            <a href="{% url 'photo_add' pk=item.pk %}" class="btn btn-success px-3"><i></i>Manage Item Photos</a>
                             <a href="{% url 'item_delete' pk=item.pk %}" class="btn btn-danger px-3 m-lg-1"><i
                                     class="fa fa-trash mr-1"></i>Delete Item</a>
                         {% else %}
