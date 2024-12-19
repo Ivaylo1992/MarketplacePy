@@ -1,6 +1,8 @@
 # MarketplacePy
 Final project for SoftUni Django Advance course 
 
+# This is a web application in which users can buy and sell items , connect with users , review users and more .. 
+
 Installation
 To run MarketplacePu locally, follow these steps:
 
